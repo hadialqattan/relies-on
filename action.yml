@@ -1,0 +1,31 @@
+name: "Relies On"
+description: "TEST"
+author: "Hadi Alqattan"
+inputs:
+  owner:
+    description: "..."
+    required: true
+  repository:
+    description: "..."
+    required: true
+  workflow:
+    description: "..."
+    required: true
+  branch:
+    description: "..."
+    required: false
+    default: ""
+  event:
+    description: "..."
+    required: false
+    default: ""
+  exclude_pull_requests:
+    description: "..."
+    required: false
+    default: true
+outputs:
+  warnings:
+    description: "..."
+runs:
+  using: "docker"
+  image: "Dockerfile"
