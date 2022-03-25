@@ -104,7 +104,7 @@ class TestGithubClient:
     def test_build_query_params(
         self, post_init, query_params: OrderedDict, expected: str
     ):
-        results = self.ghc._build_query_params(**query_params)
+        results = self.ghc._build_query_params(query_params)
         assert results == expected
 
     @pytest.mark.parametrize(
