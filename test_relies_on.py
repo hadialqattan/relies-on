@@ -1,9 +1,10 @@
+"""Relies-on testing module."""
+# pylint: disable=C0116,W0613,W0212,W0201,R0913
 import sys
 from collections import OrderedDict
 from contextlib import contextmanager
-from email.generator import Generator
 from io import StringIO
-from typing import List
+from typing import Iterator, List
 from unittest import mock
 
 import pytest
@@ -24,10 +25,11 @@ MOCK_GITHUB = MOCK % "GithubClient.%s"
 
 
 @contextmanager
-def std_redirect(is_stderr: bool) -> Generator:
+def std_redirect(is_stderr: bool) -> Iterator[StringIO]:
     """Redirect stdout/err to a variable.
 
-    :returns: Generator of `StringIO` represents `sys.stdout/stderr`.
+    :param is_stderr: weather to capture `sys.stderr` or `sys.stdout`.
+    :returns: Iterator of `StringIO` represents `sys.stdout/stderr`.
     """
     std_capture = StringIO()
     if is_stderr:
@@ -71,8 +73,8 @@ class TestFilter:
             exclude_pull_requests=True,
         )
         report = str(Filter(**kwargs))
-        for k, v in kwargs.items():
-            assert str(v) in report, f"{k!r} should have been included on the report."
+        for k, val in kwargs.items():
+            assert str(val) in report, f"{k!r} should have been included on the report."
 
 
 class TestGithubClient:
@@ -120,7 +122,7 @@ class TestGithubClient:
     def test_build_url(
         self, post_init, _build_query_params, endpoint: str, expected: str
     ):
-        results = self.ghc._build_url(endpoint, **{})
+        results = self.ghc._build_url(endpoint, query_params={})
         assert results == expected
 
     @pytest.mark.parametrize(
@@ -181,14 +183,14 @@ class TestGithubClient:
             )
             ghc: GithubClient = MockGithubClient(self.empty_filter)
 
-            @ghc._report.__func__
+            @ghc._report.__func__  # type: ignore # pylint: disable=E1101
             def function(self):
                 if raise_exit:
                     raise sys.exit(ERR_EXIT_CODE)
 
             setattr(MockGithubClient, "function", function)
             try:
-                ghc.function()
+                ghc.function()  # type: ignore # pylint: disable=E1101
             except SystemExit as err:
                 assert err.code == ERR_EXIT_CODE
                 assert f"{given_report}\n" == stderr.getvalue()
@@ -366,7 +368,7 @@ class TestFunctions:
         assert str2bool(value) == expected_bool
         assert str2bool(value.upper()) == expected_bool
 
-    # This is the only intgeration testing that we have (requests.get mocked).
+    # This is the only semi intgeration tests that we have (requests.get mocked).
     @pytest.mark.parametrize(
         "conclusion, expec_exit_code",
         [
@@ -380,7 +382,7 @@ class TestFunctions:
     )
     @mock.patch(MOCK % "req.get")
     def test_main(self, get, getenv, conclusion: str, expec_exit_code: int):
-        with std_redirect(is_stderr=expec_exit_code) as stdio:
+        with std_redirect(is_stderr=bool(expec_exit_code)) as stdio:
             get.return_value.json.return_value = {
                 "total_count": 1,
                 "workflow_runs": [

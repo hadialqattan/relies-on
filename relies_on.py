@@ -1,7 +1,8 @@
+"""Relies-on module."""
 import os
 import sys
 from dataclasses import dataclass
-from typing import Any, Callable, FrozenSet, List
+from typing import Any, Callable, Dict, FrozenSet, List
 
 import requests as req
 
@@ -51,6 +52,21 @@ TRIGGER_EVENTS: FrozenSet[str] = frozenset(
 
 @dataclass
 class Filter:
+
+    """A dataclass for filtering workflow runs.
+
+    In all docstring params below we refer to the workflow
+    which we want to check its status (relay on its status) as WFlow.
+
+    :param owner: the username of the repository owner.
+    :param repo: the repository name.
+    :param workflow_name: the WFlow name.
+    :param branch: the branch name where WFlow runs.
+    :param event: the trigger event type which triggers WFlow.
+    :param exclude_pull_requests: If true runs on pull requests will be omitted.
+    :raises SystemExit: when an invalid trigger `event` provided.
+    """
+
     def __post_init__(self) -> None:
         if self.event and self.event not in TRIGGER_EVENTS:
             print(str(self), end="")
@@ -85,6 +101,11 @@ class Filter:
 
 class GithubClient:
 
+    """A minimalist client for Github's API.
+
+    :param filter_: a `Filter` object for filtring the workflow runs.
+    """
+
     ROOT_ENDPOINT: str = "https://api.github.com"
 
     def __init__(self, filter_: Filter) -> None:
@@ -92,7 +113,9 @@ class GithubClient:
         self._repo_endpoint = f"/repos/{filter_.owner}/{filter_.repo}"
         self.filter = filter_
 
-    def _build_query_params(self, **query_params: dict) -> str:
+    def _build_query_params(self, query_params: Dict[str, object]) -> str:
+        #: builds and returns stringified query params
+        #: based on the given key-value `query_params` dict.
         params: str = ""
         for key, value in query_params.items():
             if value:
@@ -101,10 +124,14 @@ class GithubClient:
             params = "?" + params
         return params
 
-    def _build_url(self, endpoint: str, **query_params) -> str:
-        return self.ROOT_ENDPOINT + endpoint + self._build_query_params(**query_params)
+    def _build_url(self, endpoint: str, query_params: Dict[str, object]) -> str:
+        #: builds and returns stringified complete url
+        #: based on the given `endpoint` and the `query_params` dict.
+        return self.ROOT_ENDPOINT + endpoint + self._build_query_params(query_params)
 
     def _make_request(self, endpoint_url: str) -> Any:
+        #: makes a GET request safely and returns jsonified results
+        #: based on the given `endpoint_url` (complete url).
         try:
             res = req.get(endpoint_url, timeout=5)
             assert (
@@ -116,9 +143,11 @@ class GithubClient:
             sys.exit(ERR_EXIT_CODE)
 
     def _report(method: Callable[["GithubClient"], Any]) -> Any:  # type: ignore[misc] # noqa: N805,E501
+        #: A decorator outputs the current filtring (`Filter`/`self.filter`)
+        #: report in case of SystemExit occurrence.
         def wrapper(self, *args, **kwargs) -> Any:
             try:
-                return method(  # pylint: disable=E1102
+                return method(  # pylint: disable=not-callable
                     self, *args, **kwargs
                 )  # type: ignore[call-arg]
             except SystemExit as err:
@@ -129,7 +158,9 @@ class GithubClient:
 
     @_report
     def _get_default_branch(self) -> str:
-        url: str = self._build_url(self._repo_endpoint)
+        #: returns the default branch name based on `self.filter.repository`.
+        #: this method should be used when no `self.filter.branch` was specified.
+        url: str = self._build_url(self._repo_endpoint, query_params={})
         repository: dict = self._make_request(url)
         default_branch: str = repository.get("default_branch", "")
         if not default_branch:
@@ -140,6 +171,8 @@ class GithubClient:
 
     @_report
     def _get_runs(self) -> List[dict]:
+        #: returns a list of filtered workflow runs
+        #: based on `self.filter` PATH and QUERY params.
         if not self.filter.branch:
             self.filter.branch = self._get_default_branch()
         query_params = {
@@ -149,7 +182,7 @@ class GithubClient:
         }
         url: str = self._build_url(
             self._runs_endpoint,
-            **query_params,
+            query_params,
         )
         data: dict = self._make_request(url)
         if not data["total_count"]:
@@ -162,6 +195,13 @@ class GithubClient:
 
     @_report
     def get_filtered_runs(self) -> List[dict]:
+        """Returns a list of filtered workflow runs base on `self.filter`
+        values including the manual filtering params.
+
+        :returns: a list of dicts of workflow runs.
+        :raises SystemExit: when no workflow run exists
+            based on `self.filter` values.
+        """
         runs: List[dict] = self._get_runs()
         filtered_runs: List[dict] = []
         for run in runs:
@@ -179,6 +219,11 @@ class GithubClient:
 
 
 def get_exit_code(runs: List[dict]) -> int:
+    """Determine an exit code based on the given list of workflow `runs`.
+
+    :param runs: a list of dicts of workflow runs.
+    :returns: an exit code represents the status of the latest workflow run.
+    """
     lastest_run: dict = runs[0]
     if (lastest_run["status"], lastest_run["conclusion"]) == ("completed", "success"):
         return SCC_EXIT_CODE
@@ -186,6 +231,11 @@ def get_exit_code(runs: List[dict]) -> int:
 
 
 def output_conclusion(report: str, exit_code: int) -> None:
+    """Outputs a conclusion based on the given `report` and `exit_code`.
+
+    :param report: a filtering report.
+    :param exit_code: an exit code represents pass or fail status.
+    """
     std = sys.stdout if exit_code == SCC_EXIT_CODE else sys.stderr
     status = "succeeded" if exit_code == SCC_EXIT_CODE else "failed"
     print("Based on the given arguments:", end="", file=std)
@@ -194,13 +244,21 @@ def output_conclusion(report: str, exit_code: int) -> None:
 
 
 def str2bool(val: str) -> bool:
+    """A custom str to bool casting.
+
+    For `n`, `no`, `f`, `false`, `off`, and `0`
+    this function will return False otherwise True.
+
+    :param val: a value to cast.
+    :reutrns: casted `val` as bool.
+    """
     val = val.lower()
     if val in {"n", "no", "f", "false", "off", "0"}:
         return False
     return True  # valid only in `relies_on.py` use case.
 
 
-def main() -> int:
+def main() -> int:  # pylint: disable=missing-function-docstring
     filter_ = Filter(
         owner=os.getenv("INPUT_OWNER", "").lower(),
         repo=os.getenv("INPUT_REPOSITORY", "").lower(),
