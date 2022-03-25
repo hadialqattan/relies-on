@@ -43,13 +43,21 @@ repos:
     hooks:
       - id: isort
         files: "\\.(py)$"
-        args: [--settings-path=pyproject.toml]
+        args:
+          [
+            --line-length=88,
+            --multi-line=3,
+            --force-grid-wrap=0,
+            --trailing-comma,
+            --ensure-newline-before-comments,
+            --use-parentheses,
+          ]
 
   - repo: https://github.com/psf/black
     rev: 22.1.0
     hooks:
       - id: black
-        args: [--config=pyproject.toml]
+        args: [--line-length=88]
 
   - repo: https://gitlab.com/pycqa/flake8
     rev: "3.9.2"
@@ -62,10 +70,18 @@ repos:
     rev: v0.782 # Do not update.
     hooks:
       - id: mypy
-        args: [--config-file=pyproject.toml]
+        args: [--python-version=3.8, --ignore-missing-imports]
 
   - repo: https://github.com/pre-commit/mirrors-pylint
     rev: v3.0.0a4
     hooks:
       - id: pylint
-        args: [--rcfile=.pylintrc]
+        args:
+          [
+            --fail-under=10.0,
+            --disable=no-self-use,
+            --disable=import-error,
+            --disable=line-too-long,
+            --disable=no-self-argument,
+            --disable=too-few-public-methods,
+          ]
