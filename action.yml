@@ -4,10 +4,10 @@ author: "Hadi Alqattan"
 inputs:
   owner:
     description: "..."
-    required: true
+    required: false
   repository:
     description: "..."
-    required: true
+    required: false
   workflow:
     description: "..."
     required: true

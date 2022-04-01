@@ -259,11 +259,12 @@ def str2bool(val: str) -> bool:
 
 
 def main() -> int:  # pylint: disable=missing-function-docstring
+    owner, repo = os.getenv("GITHUB_REPOSITORY", "").split("/")
     filter_ = Filter(
-        owner=os.getenv("INPUT_OWNER", "").lower(),
-        repo=os.getenv("INPUT_REPOSITORY", "").lower(),
-        workflow_name=os.getenv("INPUT_WORKFLOW", "").lower(),
-        branch=os.getenv("INPUT_BRANCH", "").lower(),
+        owner=os.getenv("INPUT_OWNER", owner),
+        repo=os.getenv("INPUT_REPOSITORY", repo),
+        workflow_name=os.getenv("INPUT_WORKFLOW", ""),
+        branch=os.getenv("INPUT_BRANCH", ""),
         event=os.getenv("INPUT_EVENT", "").lower(),
         exclude_pull_requests=str2bool(
             os.getenv("INPUT_EXCLUDE_PULL_REQUESTS", "true")
