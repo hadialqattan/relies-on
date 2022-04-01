@@ -2,7 +2,7 @@
 import os
 import sys
 from dataclasses import dataclass
-from typing import Any, Callable, Dict, FrozenSet, List
+from typing import Any, Callable, Dict, FrozenSet, List, Tuple
 
 import requests as req
 
@@ -243,6 +243,24 @@ def output_conclusion(report: str, exit_code: int) -> None:
     print(f"The latest run has {status}!", file=std)
 
 
+def get_owner_repo_environs() -> Tuple[str, str]:
+    """Returns default values of the `owner` username and `repository` name in
+    case `INPUT_OWNER` or `INPUT_REPOSITORY` environs are not provided,
+    otherwise, the values of `INPUT_OWNER` and `INPUT_REPOSITORY` would be
+    returned as (owner, repo), respectively.
+
+    :returns: a tuple of repo owner username and repo name, respectively.
+    """
+    d_owner, d_repo = os.getenv("GITHUB_REPOSITORY", "").split("/")
+    owner = os.getenv("INPUT_OWNER", "")
+    if not owner:
+        owner = d_owner
+    repo = os.getenv("INPUT_REPOSITORY", "")
+    if not repo:
+        repo = d_repo
+    return owner, repo
+
+
 def str2bool(val: str) -> bool:
     """A custom str to bool casting.
 
@@ -259,10 +277,10 @@ def str2bool(val: str) -> bool:
 
 
 def main() -> int:  # pylint: disable=missing-function-docstring
-    owner, repo = os.getenv("GITHUB_REPOSITORY", "").split("/")
+    owner, repo = get_owner_repo_environs()
     filter_ = Filter(
-        owner=os.getenv("INPUT_OWNER", owner),
-        repo=os.getenv("INPUT_REPOSITORY", repo),
+        owner=owner,
+        repo=repo,
         workflow_name=os.getenv("INPUT_WORKFLOW", ""),
         branch=os.getenv("INPUT_BRANCH", ""),
         event=os.getenv("INPUT_EVENT", "").lower(),

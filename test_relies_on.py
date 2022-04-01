@@ -16,6 +16,7 @@ from relies_on import (
     Filter,
     GithubClient,
     get_exit_code,
+    get_owner_repo_environs,
     main,
     output_conclusion,
     str2bool,
@@ -347,6 +348,37 @@ class TestFunctions:
             assert expected_substring in output
 
     @pytest.mark.parametrize(
+        "is_custom_owner_repo",
+        [
+            pytest.param(True, id="custom"),
+            pytest.param(False, id="default"),
+        ],
+    )
+    def test_get_owner_repo_environs(self, is_custom_owner_repo: bool):
+        env_vars = {
+            "GITHUB_REPOSITORY": "default_owner/default_repo",
+            "INPUT_OWNER": "",
+            "INPUT_REPOSITORY": "",
+            "INPUT_WORKFLOW": "CI",
+            "INPUT_BRANCH": "main",
+            "INPUT EVENT": "push",
+            "INPUT_EXCLUDE_PULL_REQUESTS": "true",
+        }
+        if is_custom_owner_repo:
+            env_vars["INPUT_OWNER"] = "custom_owner"
+            env_vars["INPUT_REPOSITORY"] = "custom_repo"
+        patcher = mock.patch.dict(os.environ, env_vars)
+        patcher.start()
+        owner, repo = get_owner_repo_environs()
+        patcher.stop()
+        if is_custom_owner_repo:
+            assert owner == "custom_owner"
+            assert repo == "custom_repo"
+        else:
+            assert owner == "default_owner"
+            assert repo == "default_repo"
+
+    @pytest.mark.parametrize(
         "value, expected_bool",
         [
             # Falsy values.
@@ -404,47 +436,3 @@ class TestFunctions:
                 assert "succeeded" in stdio.getvalue()
             else:
                 assert "failed" in stdio.getvalue()
-
-    @pytest.mark.parametrize(
-        "is_custom_owner_repo",
-        [
-            pytest.param(True, id="custom"),
-            pytest.param(False, id="default"),
-        ],
-    )
-    @mock.patch(MOCK % "req.get")
-    def test_main_env_vars(self, get, is_custom_owner_repo: bool):
-        env_vars = {
-            "GITHUB_REPOSITORY": "default_owner/default_repo",
-            "INPUT_WORKFLOW": "CI",
-            "INPUT_BRANCH": "main",
-            "INPUT EVENT": "push",
-            "INPUT_EXCLUDE_PULL_REQUESTS": "true",
-        }
-        if is_custom_owner_repo:
-            env_vars["INPUT_OWNER"] = "custom_owner"
-            env_vars["INPUT_REPOSITORY"] = "custom_repo"
-        patcher = mock.patch.dict(os.environ, env_vars)
-        patcher.start()
-        with std_redirect(is_stderr=False) as stdio:
-            get.return_value.json.return_value = {
-                "total_count": 1,
-                "workflow_runs": [
-                    {
-                        "repository": {"fork": False},
-                        "name": "CI",
-                        "status": "completed",
-                        "conclusion": "success",
-                    }
-                ],
-            }
-            type(get.return_value).status_code = mock.PropertyMock(return_value=200)
-            main()
-            stdio_value = stdio.getvalue()
-            if is_custom_owner_repo:
-                assert "custom_owner" in stdio_value
-                assert "custom_repo" in stdio_value
-            else:
-                assert "default_owner" in stdio_value
-                assert "default_repo" in stdio_value
-        patcher.stop()
