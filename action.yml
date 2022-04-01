@@ -14,11 +14,9 @@ inputs:
   branch:
     description: "..."
     required: false
-    default: ""
   event:
     description: "..."
     required: false
-    default: ""
   exclude_pull_requests:
     description: "..."
     required: false
