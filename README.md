@@ -6,7 +6,7 @@
   A Github action that makes a workflow rely on the status of another.
   </br>
   </br>
-  <i>"Relies-on is to workflows as <code><a href="https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idneeds">needs</a></code> is to jobs" - Realies-on Author 😉</i>
+  <i>"Relies-on is to workflows as <code><a href="https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idneeds">needs</a></code> is to jobs" - Relies-on Author 😉</i>
 </h4>
 
 ##
