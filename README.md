@@ -2,12 +2,12 @@
     <img width=321 src="./logo.png"/><br>
 </h1>
 
-<h3 align="center">
+<h4 align="center">
   A Github action that makes a workflow rely on the status of another.
   </br>
   </br>
   <i>"Relies-on is to workflows as <code><a href="https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idneeds">needs</a></code> is to jobs" - Realies-on Author 😉</i>
-</h3>
+</h4>
 
 ##
 </br>
