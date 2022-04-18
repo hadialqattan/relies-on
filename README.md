@@ -3,7 +3,7 @@
 </h1>
 
 <h4 align="center">
-  A Github action that makes a workflow rely on the status of another.
+  A Github action to identify any workflows that must complete successfully before another workflow will run.
   </br>
   </br>
   <i>"Relies-on is to workflows as <code><a href="https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idneeds">needs</a></code> is to jobs" - Relies-on Author 😉</i>
@@ -31,13 +31,40 @@
 
 ##
 
-## Why does Relies-on exist? 👽
+## Why does Relies-on exist? 🛸
 
-blah blah blah...
+The main purpose of Relies-on is to identify any workflows that must complete successfully before another workflow will run. 
 
-## How could aliens use this action? 🖱️
+_(The idea behind this action is similar to Github's <code><a href="https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idneeds">needs</a></code> but at a workflows scale)._
 
-blah blah blah...
+As an example of a situation where Relies-on comes in handy, let's imagine that you have two different workflows one called `CI` and another called `CD` assuming the `CD` workflow will do a critical thing that mustn't be performed only if the latest run of the `CI` workflow succeeded. One approach to solve this problem is to check the status of the latest `CI` run manually, but the problem with this approach is the ability to run the `CD` workflow (doing the critical thing) whether the latest `CI` workflow run was succeeded or not, which is not totally safe because there is no actual restriction, therefore Relies-on comes into existence.
+
+## How could aliens use this action? 👽
+
+Here's a simple example to get started (assume we have another workflow called `CI`):
+
+```yml
+# This is a CD system. It should publish a new release
+# if and only if the lastest run of the CI workflow has succeeded.
+name: CD
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+      
+jobs:
+  check_ci_status:
+    name: Check the CI Workflow's Status
+    runs-on: ubuntu-latest
+    steps:
+      - uses: hadialqattan/relies-on@v1
+        with:
+          workflow: CI
+
+  # the rest of the jobs...
+```
+This would terminate the `CD` workflow if the latest `CI` workflow run has faild.
 
 ## License 🚓
 
