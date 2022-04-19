@@ -3,7 +3,7 @@ description: "A Github action to identify any workflows that must complete succe
 author: "Hadi Alqattan"
 inputs:
   owner:
-    description: "The username of the owner of the work containing the workflow. [default=currect repository owner username]"
+    description: "The username of the owner of the repository containing the workflow. [default=currect repository owner username]"
     required: false
   repository:
     description: "The name of the repository containing the workflow. [default=current repository name]"
