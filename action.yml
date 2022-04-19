@@ -12,7 +12,7 @@ inputs:
     description: "The name of the workflow that would be checked."
     required: true
   branch:
-    description: "The name of the branch where the workflow run. [default=repository's default branch (most likely master or main)]"
+    description: "The name of the branch where the workflow runs. [default=repository's default branch (most likely master or main)]"
     required: false
   event:
     description: "The type of the event that triggers the workflow. [default= ]"
