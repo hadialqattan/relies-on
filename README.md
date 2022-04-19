@@ -66,7 +66,7 @@ jobs:
 ```
 This would terminate the `CD` workflow if the latest `CI` workflow run has faild.
 
-**Custom invocations:**
+**Optional action inputs (arguments):**
 
 ```yml
 owner: The username of the owner of the repository containing the workflow. [default=currect repository owner username]
@@ -83,6 +83,44 @@ exclude_pull_requests: If true pull requests based runs are omitted. [default=tr
 # Falsy values: "n", "no", "f", "false", "off", "0"
 # Truthy values: "y", "yes", "t", "true", "on", "1"
 ```
+
+## Changelog
+
+All notable changes to this project will be documented here.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and
+this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+<!-- Please use the below template. -->
+<!-- - [description by @username](https://github.com/hadialqattan/relies-on/pull/{pull_number}) -->
+
+**[Unreleased]**
+
+## Authors 👤
+
+Authors: 
+ - Hadi Alqattan ([@hadialqattan](https://github.com/hadialqattan)) <alqattanhadizaki@gmail.com>
+
+Contributors:
+<!-- Please write your name alphabetically and use the below template. -->
+<!-- - First Last ([@username](https://github.com/username)) <example@email.com> -->
+
+## Contributing
+
+A big welcome for considering contributing to make the project better. In general, we follow the ["fork-and-pull"](https://github.com/susam/gitpr) Git
+workflow:
+
+1. Fork the repository to your own Github account.
+2. Clone the project to your machine.
+3. Create a branch locally.
+4. Commit changes to the branch.
+5. Follow any formatting and testing guidelines specific to this repo (`pre-commit install`).
+6. Push changes to your fork.
+7. Open a PR in our repository.
+
+## Code of Conduct
+
+Everyone participating in the Relies-on project, and in particular in the issue tracker, and pull requests is expected to treat other people with respect.
 
 ## License 🚓
 
