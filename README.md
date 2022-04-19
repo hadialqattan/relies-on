@@ -66,6 +66,24 @@ jobs:
 ```
 This would terminate the `CD` workflow if the latest `CI` workflow run has faild.
 
+**Custom invocations:**
+
+```yml
+owner: The username of the owner of the repository containing the workflow. [default=currect repository owner username]
+
+repository: The name of the repository containing the workflow. [default=current repository name]
+
+workflow: The name of the workflow that would be checked.
+
+branch: The name of the branch where the workflow runs. [default=repository's default branch (most likely master or main)]
+  
+event: The type of the event that triggers the workflow. [default= ]
+
+exclude_pull_requests: If true pull requests based runs are omitted. [default=true]
+# Falsy values: "n", "no", "f", "false", "off", "0"
+# Truthy values: "y", "yes", "t", "true", "on", "1"
+```
+
 ## License 🚓
 
 This project is licensed under an [MIT](./LICENSE) license.
