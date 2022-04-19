@@ -33,11 +33,21 @@
 
 ## Why does Relies-on exist? 🛸
 
-The main purpose of Relies-on is to identify any workflows that must complete successfully before another workflow will run. 
+The main purpose of Relies-on is to identify any workflows that must complete
+successfully before another workflow will run.
 
-_(The idea behind this action is similar to Github's <code><a href="https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idneeds">needs</a></code> but at a workflows scale)._
+_(The idea behind this action is similar to Github's
+<code><a href="https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idneeds">needs</a></code>
+but at a workflows scale)._
 
-As an example of a situation where Relies-on comes in handy, let's imagine that you have two different workflows one called `CI` and another called `CD` assuming the `CD` workflow will do a critical thing that mustn't be performed only if the latest run of the `CI` workflow succeeded. One approach to solve this problem is to check the status of the latest `CI` run manually, but the problem with this approach is the ability to run the `CD` workflow (doing the critical thing) whether the latest `CI` workflow run was succeeded or not, which is not totally safe because there is no actual restriction, therefore Relies-on comes into existence.
+As an example of a situation where Relies-on comes in handy, let's imagine that you have
+two different workflows one called `CI` and another called `CD` assuming the `CD`
+workflow will do a critical thing that mustn't be performed only if the latest run of
+the `CI` workflow succeeded. One approach to solve this problem is to check the status
+of the latest `CI` run manually, but the problem with this approach is the ability to
+run the `CD` workflow (doing the critical thing) whether the latest `CI` workflow run
+was succeeded or not, which is not totally safe because there is no actual restriction,
+therefore Relies-on comes into existence.
 
 ## How could aliens use this action? 👽
 
@@ -52,7 +62,7 @@ on:
   push:
     tags:
       - "v*.*.*"
-      
+
 jobs:
   check_ci_status:
     name: Check the CI Workflow's Status
@@ -64,19 +74,25 @@ jobs:
 
   # the rest of the jobs...
 ```
+
 This would terminate the `CD` workflow if the latest `CI` workflow run has faild.
 
 **Optional action inputs (arguments):**
 
 ```yml
-owner: The username of the owner of the repository containing the workflow. [default=currect repository owner username]
+owner:
+  The username of the owner of the repository containing the workflow. [default=currect
+  repository owner username]
 
-repository: The name of the repository containing the workflow. [default=current repository name]
+repository:
+  The name of the repository containing the workflow. [default=current repository name]
 
 workflow: The name of the workflow that would be checked.
 
-branch: The name of the branch where the workflow runs. [default=repository's default branch (most likely master or main)]
-  
+branch:
+  The name of the branch where the workflow runs. [default=repository's default branch
+  (most likely master or main)]
+
 event: The type of the event that triggers the workflow. [default= ]
 
 exclude_pull_requests: If true pull requests based runs are omitted. [default=true]
@@ -98,29 +114,34 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## Authors 👤
 
-Authors: 
- - Hadi Alqattan ([@hadialqattan](https://github.com/hadialqattan)) <alqattanhadizaki@gmail.com>
+Authors:
+
+- Hadi Alqattan ([@hadialqattan](https://github.com/hadialqattan))
+  <alqattanhadizaki@gmail.com>
 
 Contributors:
+
 <!-- Please write your name alphabetically and use the below template. -->
 <!-- - First Last ([@username](https://github.com/username)) <example@email.com> -->
 
 ## Contributing ✨
 
-A big welcome for considering contributing to make the project better. In general, we follow the ["fork-and-pull"](https://github.com/susam/gitpr) Git
-workflow:
+A big welcome for considering contributing to make the project better. In general, we
+follow the ["fork-and-pull"](https://github.com/susam/gitpr) Git workflow:
 
 1. Fork the repository to your own Github account.
 2. Clone the project to your machine.
 3. Create a branch locally.
 4. Commit changes to the branch.
-5. Follow any formatting and testing guidelines specific to this repo (`pre-commit install`).
+5. Follow any formatting and testing guidelines specific to this repo
+   (`pre-commit install`).
 6. Push changes to your fork.
 7. Open a PR in our repository.
 
 ## Code of Conduct ❤️
 
-Everyone participating in the Relies-on project, and in particular in the issue tracker, and pull requests is expected to treat other people with respect.
+Everyone participating in the Relies-on project, and in particular in the issue tracker,
+and pull requests is expected to treat other people with respect.
 
 ## License 🚓
 
