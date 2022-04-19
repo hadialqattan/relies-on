@@ -84,7 +84,7 @@ exclude_pull_requests: If true pull requests based runs are omitted. [default=tr
 # Truthy values: "y", "yes", "t", "true", "on", "1"
 ```
 
-## Changelog
+## Changelog 🆕
 
 All notable changes to this project will be documented here.
 
@@ -105,7 +105,7 @@ Contributors:
 <!-- Please write your name alphabetically and use the below template. -->
 <!-- - First Last ([@username](https://github.com/username)) <example@email.com> -->
 
-## Contributing
+## Contributing ✨
 
 A big welcome for considering contributing to make the project better. In general, we follow the ["fork-and-pull"](https://github.com/susam/gitpr) Git
 workflow:
@@ -118,7 +118,7 @@ workflow:
 6. Push changes to your fork.
 7. Open a PR in our repository.
 
-## Code of Conduct
+## Code of Conduct ❤️
 
 Everyone participating in the Relies-on project, and in particular in the issue tracker, and pull requests is expected to treat other people with respect.
 
