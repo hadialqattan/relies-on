@@ -75,7 +75,7 @@ jobs:
   # the rest of the jobs...
 ```
 
-This would terminate the `CD` workflow if the latest `CI` workflow run has faild.
+This would terminate the `CD` workflow if the latest `CI` workflow run faild.
 
 **Optional action inputs (arguments):**
 
