@@ -110,7 +110,15 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 <!-- Please use the below template. -->
 <!-- - [description by @username](https://github.com/hadialqattan/relies-on/pull/{pull_number}) -->
 
-**[Unreleased]**
+### [Unreleased]
+
+### [1.0.0] - 2022-04-26
+
+#### Added
+
+- [First published version](https://github.com/marketplace/actions/relies-on), Happy 🍰 Day 2022!
+- [Semantically versioned](https://semver.org/spec/v2.0.0.html)
+- [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) formatted.
 
 ## Authors 👤
 
