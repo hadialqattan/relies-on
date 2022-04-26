@@ -116,7 +116,8 @@ this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 #### Added
 
-- [First published version](https://github.com/marketplace/actions/relies-on), Happy 🍰 Day 2022!
+- [First published version](https://github.com/marketplace/actions/relies-on), Happy 🍰
+  Day 2022!
 - [Semantically versioned](https://semver.org/spec/v2.0.0.html)
 - [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) formatted.
 
