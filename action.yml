@@ -1,4 +1,4 @@
-name: "Relies On"
+name: relies-on
 description:
   "A Github action to identify any workflows that must complete successfully before
   another workflow will run."
