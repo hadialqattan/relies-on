@@ -48,10 +48,10 @@ jobs:
 
       - name: Test with pytest
         run: |
-          python -m pytest test_relies_on.py
+          python -m pytest test_relies_on.py -vv --cov=./ --cov-report=xml
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2.1.0
+        uses: codecov/codecov-action@v3.1.0
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           name: ubuntu-latest, python3.8

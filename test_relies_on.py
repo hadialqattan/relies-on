@@ -61,7 +61,7 @@ class TestFilter:
                 event="INVALID_TRIGGER_EVENT",
                 exclude_pull_requests=True,
             )
-            assert False, "SystemExit should have been raised"
+            assert False, "SystemExit should have been raised"  # pragma: no cover
         except SystemExit as err:
             assert err.code == ERR_EXIT_CODE
 
