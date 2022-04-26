@@ -1,0 +1,14 @@
+coverage:
+  precision: 2
+  round: down
+  range: "95...100"
+
+  status:
+    project: yes
+    patch: yes
+    changes: yes
+
+comment:
+  layout: "reach, diff, files"
+  behavior: default
+  require_changes: no
