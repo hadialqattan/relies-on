@@ -46,7 +46,7 @@ therefore Relies-on comes into existence.
 
 ## How could aliens use this action? 👽
 
-Here's a simple example to get started (assume we have another workflow called `CI`):
+Here's a simple example to get started (assuming we have another workflow called `CI`):
 
 ```yml
 # This is a CD system. It should publish a new release
@@ -63,11 +63,14 @@ jobs:
     name: Check the CI Workflow's Status
     runs-on: ubuntu-latest
     steps:
-      - uses: hadialqattan/relies-on@v1
+      - uses: hadialqattan/relies-on@v1.0.0
         with:
           workflow: CI
 
-  # the rest of the jobs...
+  deployment:
+    name: Deployment job
+    needs: check_ci_status
+    ...
 ```
 
 This would terminate the `CD` workflow if the latest `CI` workflow run faild.
