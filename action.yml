@@ -1,34 +1,47 @@
 name: relies-on
+
 description:
   "A Github action to identify any workflows that must complete successfully before
   another workflow will run."
+
 author: "Hadi Alqattan"
+
 inputs:
   owner:
     description:
       "The username of the owner of the repository containing the workflow.
       [default=currect repository owner username]"
     required: false
+
   repository:
     description:
       "The name of the repository containing the workflow. [default=current repository
       name]"
     required: false
+
   workflow:
     description: "The name of the workflow that would be checked."
     required: true
+
   branch:
     description:
       "The name of the branch where the workflow runs. [default=repository's default
       branch (most likely master or main)]"
     required: false
+
   event:
     description: "The type of the event that triggers the workflow. [default= ]"
     required: false
+
   exclude_pull_requests:
     description: "If true pull requests based runs are omitted. [default=true]"
     required: false
     default: true
+
 runs:
   using: "docker"
   image: "Dockerfile"
+
+branding:
+  icon: "check"
+  color: "green"
