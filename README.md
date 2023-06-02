@@ -13,7 +13,7 @@
 
 </br>
 <p align="center">
-    <a href="https://github.com/hadialqattan/relies-on/actions?query=workflow%3ACI"><img src="https://img.shields.io/github/workflow/status/hadialqattan/relies-on/CI/main?label=CI&logo=github&style=flat-square" alt="CI"></a>
+    <a href="https://github.com/hadialqattan/relies-on/actions?query=workflow%3ACI"><img src="https://img.shields.io/github/actions/workflow/status/hadialqattan/relies-on/ci.yml?label=CI&logo=github&style=flat-square" alt="CI"></a>
     <a href="https://codecov.io/gh/hadialqattan/relies-on"><img src="https://img.shields.io/codecov/c/gh/hadialqattan/relies-on/main?token=J5B4U3N3X4&style=flat-square" alt="Codecov"></a>
   <a href="https://github.com/hadialqattan/relies-on/blob/main/LICENSE"><img src="https://img.shields.io/github/license/hadialqattan/relies-on.svg?color=dark-green&style=flat-square" alt="License"></a>
 </p>
